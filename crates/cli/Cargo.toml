@@ -1,0 +1,13 @@
+[package]
+name = "murmur-cli"
+description = "murmur CLI"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "murmur"
+path = "src/main.rs"
+
+[dependencies]
+murmur-core.workspace = true

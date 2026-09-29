@@ -1,0 +1,8 @@
+[package]
+name = "murmur-core"
+description = "murmur 코어: 이벤트 모델, 서명, 저장, 동기화, 네트워킹"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
