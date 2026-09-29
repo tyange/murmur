@@ -6,3 +6,6 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
+ed25519-dalek = "3.0.0"
+getrandom = "0.4.3"
+ciborium = "0.2.2"

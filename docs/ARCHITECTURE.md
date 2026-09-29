@@ -146,7 +146,7 @@ struct Event {
 
 - `id`는 필드로 저장하지 않고 계산한다. 누구도 id와 내용을 어긋나게 만들 수 없다.
 - `seq`는 동기화 커서를 단순하게 만든다(§6.2). 같은 device가 같은 seq로 서로 다른 이벤트를 서명하면 **equivocation**(키 오용 증거)으로 기록하고 둘 다 보관·표시 보류한다.
-- 서명 시 도메인 분리 접두사(`b"murmur-event-v1"`)를 붙여, 같은 키로 서명하는 다른 메시지(DeviceCert, libp2p 핸드셰이크 등)와 절대 혼동되지 않게 한다.
+- 서명 대상 CBOR 배열의 **첫 원소에 도메인 문자열**(`"murmur-event-v1"`, 인증서는 `"murmur-cert-v1"`, 폐기는 `"murmur-revoke-v1"`)을 넣어, 같은 키로 서명하는 다른 메시지(DeviceCert, libp2p 핸드셰이크 등)와 절대 혼동되지 않게 한다.
 
 ### 4.2 Kind (1단계)
 
@@ -257,7 +257,8 @@ B → A : Events [ B가 가진 것 중 A의 벡터보다 새로운 raw 이벤트
 
 | 크레이트 | 이유 |
 |----------|------|
-| `ed25519-dalek` | 서명. 표준, 순수 Rust, 감사됨 |
+| `ed25519-dalek` | 서명. 표준, 순수 Rust, 감사됨. `rand_core` feature는 끄고 키는 `getrandom`으로 만든 시드에서 생성 |
+| `getrandom` | OS 난수(키 시드). 3.0의 `generate()`도 결국 getrandom의 `SysRng`를 요구하므로, rand_core 트레이트를 거치지 않고 32바이트를 직접 채운다 |
 | `rusqlite` (bundled) | 단일 파일 저장소, 시스템 SQLite 의존 제거 |
 | `serde` | 직렬화 공통 인터페이스 |
 | `ciborium` | 결정적 CBOR 직렬화 (D1). serde 기반, 순수 Rust |
